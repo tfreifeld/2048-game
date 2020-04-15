@@ -6,8 +6,6 @@ Position = Tuple[int, int]
 
 
 class Board:
-    _POSITIONS: List[Tuple[int, int]]
-
     class Square:
 
         @staticmethod
@@ -76,9 +74,6 @@ class Board:
         self._squares: Dict[Position, Board.Square] = dict()
         self._empty_positions: List[Position] = self._POSITIONS.copy()
         self._occupied_positions: List[Position] = []
-
-        # self._directions: Dict[str, Position] = {"up": (-1, 0), "down": (1, 0), "left": (0, -1), "right": (0, 1)}
-
         self._verbose: bool = verbose
 
     def get_square(self, row: int, col: int) -> Square:
