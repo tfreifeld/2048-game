@@ -165,6 +165,7 @@ class Board:
                         if self._verbose:
                             print("Target position {} is occupied with a different number {}"
                                   .format(target_pos, bumped_square.number))
+                        break
                 if self._verbose:
                     self.print()
 
@@ -175,7 +176,7 @@ class Board:
         print(form.format(*data))
 
 
-board = Board(True)
+board = Board()
 directions = {"w": "up", "d": "right", "s": "down", "a": "left"}
 board.spawn()
 board.spawn()
