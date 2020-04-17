@@ -1,6 +1,6 @@
 from random import choice as rand_choice
 from random import random
-from typing import List, Dict, Tuple
+from typing import List, Dict, Tuple, Optional
 
 Position = Tuple[int, int]
 
@@ -9,40 +9,40 @@ class Board:
     class Square:
 
         @staticmethod
-        def up_range(pos):
+        def up_range(pos: Position) -> List[Position]:
             row, col = pos
             return [(i, col) for i in range(row - 1, -1, -1)]
 
         @staticmethod
-        def down_range(pos):
+        def down_range(pos: Position) -> List[Position]:
             row, col = pos
             return [(i, col) for i in range(row + 1, 4)]
 
         @staticmethod
-        def right_range(pos):
+        def right_range(pos: Position) -> List[Position]:
             row, col = pos
             return [(row, i) for i in range(col + 1, 4)]
 
         @staticmethod
-        def left_range(pos):
+        def left_range(pos: Position) -> List[Position]:
             row, col = pos
             return [(row, i) for i in range(col - 1, -1, -1)]
 
-        def __init__(self, position: Position, number=None) -> None:
-            self._ranges = dict()
+        def __init__(self, position: Position, number: Optional[int] = None) -> None:
+            self._ranges: Dict[str, List[Position]] = dict()
             self.number: int = number
             self.position: Position = position
 
         @property
-        def number(self):
+        def number(self) -> int:
             return self._number
 
         @number.setter
-        def number(self, num):
+        def number(self, num) -> None:
             self._number: int = num
 
         @property
-        def position(self):
+        def position(self) -> Position:
             return self._position
 
         @position.setter
@@ -52,7 +52,7 @@ class Board:
                                  "left": self.left_range(position), "right": self.right_range(position)})
 
         @property
-        def ranges(self):
+        def ranges(self) -> Dict[str, List[Position]]:
             return self._ranges
 
         def update_num(self) -> None:
@@ -93,7 +93,7 @@ class Board:
         self._empty_positions.append(square.position)
 
     def move_square(self, target: Position, square: Square) -> None:
-        old = square.position
+        old: Position = square.position
         square.position = target
         self._squares.pop(old)
         self._squares.update({target: square})
@@ -125,12 +125,15 @@ class Board:
              "left": [(row, col) for row in range(0, 4, 1) for col in range(1, 4, 1)],
              "right": [(row, col) for row in range(0, 4, 1) for col in range(2, -1, -1)]}
 
+        pos: Position
         for pos in direction_switcher[direction]:
 
             if pos in self._squares:
-                square = self._squares[pos]
+                square: Board.Square = self._squares[pos]
             else:
                 continue
+
+            target_pos: Position
             for target_pos in square.ranges[direction]:
 
                 if self._verbose:
@@ -165,18 +168,18 @@ class Board:
                     self.print()
 
     def print(self):
-        form = " {:4} {:4} {:4} {:4}\n {:4} {:4} {:4} {:4}\n {:4} {:4} {:4} {:4}\n {:4} {:4} {:4} {:4}\n"
-        data = tuple(self._squares[position].number if position in self._occupied_positions
-                     else 0 for position in self._POSITIONS)
+        form: str = " {:4} {:4} {:4} {:4}\n {:4} {:4} {:4} {:4}\n {:4} {:4} {:4} {:4}\n {:4} {:4} {:4} {:4}\n"
+        data: Tuple[int, ...] = tuple(self._squares[position].number if position in self._occupied_positions
+                                      else 0 for position in self._POSITIONS)
         print(form.format(*data))
 
 
-board = Board()
-directions = {"w": "up", "d": "right", "s": "down", "a": "left"}
+board: Board = Board()
+directions: Dict[str,str] = {"w": "up", "d": "right", "s": "down", "a": "left"}
 board.spawn()
 board.spawn()
 board.print()
-choice = input()
+choice: str = input()
 
 while choice != 'q':
     if choice in directions:
