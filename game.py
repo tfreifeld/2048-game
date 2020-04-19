@@ -4,6 +4,8 @@ from typing import List, Optional, Dict, Tuple
 
 Position = Tuple[int, int]
 
+# TODO: prevent squares that have already been combined in this turn from being combined again.
+# TODO: add a win/lose check to spawn
 
 class Board:
     class Square:
