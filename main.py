@@ -8,13 +8,18 @@ from game import Position
 def gui_setup() -> Tuple[tk.Tk, Dict[Position, tk.Label]]:
     window: tk.Tk = tk.Tk()
     frame_board: tk.Frame = tk.Frame(master=window)
+
     frame_board.pack(fill=tk.BOTH, expand=True)
+
+    # Bind keys to callbacks
     window.bind("<Left>", left_pressed)
     window.bind("<Right>", right_pressed)
     window.bind("<Up>", up_pressed)
     window.bind("<Down>", down_pressed)
 
+    # A position to tk.label dictionary
     square_labels: Dict[Position, tk.Label] = dict()
+
     for i in range(4):
 
         frame_board.columnconfigure(i, weight=1)
@@ -35,7 +40,11 @@ def gui_setup() -> Tuple[tk.Tk, Dict[Position, tk.Label]]:
 
 def setup_game(square_labels: Dict[Position, tk.Label]) -> None:
     global board
-    board = Board(square_labels)
+
+    # Setup board
+    board = Board(square_labels, True)
+
+    # Spawn first two tiles
     board.spawn()
     board.spawn()
 
@@ -63,6 +72,7 @@ def down_pressed(_: tk.Event) -> None:
 def main():
     window: tk.Tk
     square_labels: Dict[Position, tk.Label]
+
     window, square_labels = gui_setup()
     setup_game(square_labels)
     window.mainloop()
